@@ -1,6 +1,7 @@
 package com.mmall.util;
 
 import org.springframework.util.StringUtils;
+import sun.security.provider.MD5;
 
 import java.security.MessageDigest;
 
@@ -24,8 +25,8 @@ public class MD5Util {
         int d1 = n / 16;
         int d2 = n % 16;
         return hexDigits[d1] + hexDigits[d2];
-    }
 
+    }
     /**
      * 返回大写MD5
      *

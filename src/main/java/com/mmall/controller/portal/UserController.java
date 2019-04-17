@@ -80,4 +80,48 @@ public class UserController {
     {
         return iUserService.checkValid(str, type);
     }
+
+    /**
+     * 获取当前登陆用户信息
+     * @param session 会话
+     * @return
+     */
+    @RequestMapping(value = "get_user_info.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<User> getUserInfo(HttpSession session)
+    {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+
+        if(user != null) {
+            return ServerResponse.createBySuccess(user);
+        }
+
+        return ServerResponse.createByErrorMessage("用户未登录, 无法获取信息.");
+    }
+
+    /**
+     * 获取重置密码的问题
+     * @param username 用户名
+     * @return
+     */
+    @RequestMapping(value = "forget_get_question.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> forgetGetQuestion(String username)
+    {
+        return iUserService.selectQuestion(username);
+    }
+
+    /**
+     * 检查问题答案是否正确
+     * @param username 用户名
+     * @param question 问题
+     * @param answer   答案
+     * @return
+     */
+    @RequestMapping(value = "forget_check_question.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> forgetCheckAnswer(String username, String question, String answer)
+    {
+        return iUserService.checkAnswer(username, question, answer);
+    }
 }
