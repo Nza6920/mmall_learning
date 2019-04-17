@@ -41,4 +41,43 @@ public class UserController {
 
         return response;
     }
+
+    /**
+     * 用户退出登陆
+     * @param session 会话
+     * @return
+     */
+    @RequestMapping(value = "logout.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> logout(HttpSession session)
+    {
+        session.removeAttribute(Const.CURRENT_USER);
+
+        return ServerResponse.createBySuccess();
+    }
+
+    /**
+     * 用户注册
+     * @param user 用户
+     * @return
+     */
+    @RequestMapping(value = "register.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> register(User user) {
+
+        return iUserService.register(user);
+    }
+
+    /**
+     * 判断参数类型是用户名还是email
+     * @param str 参数的值
+     * @param type  参数类型
+     * @return
+     */
+    @RequestMapping(value = "check_valid.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> checkValid(String str, String type)
+    {
+        return iUserService.checkValid(str, type);
+    }
 }
