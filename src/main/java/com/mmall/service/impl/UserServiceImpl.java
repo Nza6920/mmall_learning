@@ -98,7 +98,7 @@ public class UserServiceImpl implements IUserService {
     public ServerResponse<String> selectQuestion(String username) {
 
         ServerResponse validResponse = this.checkValid(username, Const.USERNAME);
-        if (! validResponse.isSuccess()) {
+        if (validResponse.isSuccess()) {
             // 用户不存在
             return ServerResponse.createByErrorMessage("用户不存在!");
         }
@@ -130,12 +130,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken) {
-        if (StringUtils.isNotBlank(forgetToken)) {
+        if (StringUtils.isBlank(forgetToken)) {
             return ServerResponse.createByErrorMessage("参数错误, token需要传递");
         }
 
         ServerResponse validResponse = this.checkValid(username, Const.USERNAME);
-        if (! validResponse.isSuccess()) {
+        if (validResponse.isSuccess()) {
             // 用户不存在
             return ServerResponse.createByErrorMessage("用户不存在!");
         }
@@ -204,5 +204,19 @@ public class UserServiceImpl implements IUserService {
         }
 
         return ServerResponse.createByErrorMessage("更新个人信息失败");
+    }
+
+    @Override
+    public ServerResponse<User> getInfomation(Integer userId) {
+
+        User user = userMapper.selectByPrimaryKey(userId);
+
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("找不到当前用户!");
+        }
+
+        user.setPassword(StringUtils.EMPTY);
+
+        return ServerResponse.createBySuccess(user);
     }
 }

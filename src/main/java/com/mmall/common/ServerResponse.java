@@ -1,14 +1,12 @@
 package com.mmall.common;
 
-import net.sf.jsqlparser.schema.Server;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
-import java.sql.SQLOutput;
 
 // 保证序列化Json对象时, 会忽略null的对象
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServerResponse<T> implements Serializable {
 
     private static final long serialVersionUID = 708309692405384337L;

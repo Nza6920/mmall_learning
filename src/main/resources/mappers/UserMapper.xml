@@ -186,7 +186,7 @@
   </select>
 
   <update id="updatePasswordByUsername" parameterType="map">
-    update password
+    update mmall_user
     set password = #{passwordNew} , update_time = now()
     where username = #{username}
   </update>
