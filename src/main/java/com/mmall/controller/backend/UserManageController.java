@@ -24,7 +24,7 @@ public class UserManageController {
      * @param username  用户名
      * @param password  密码
      * @param session   会话
-     * @return
+     * @return ServerResponse
      */
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
     @ResponseBody

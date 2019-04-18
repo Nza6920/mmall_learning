@@ -219,4 +219,17 @@ public class UserServiceImpl implements IUserService {
 
         return ServerResponse.createBySuccess(user);
     }
+
+
+    // backend
+
+    @Override
+    public ServerResponse<String> checkAdminRole(User user) {
+        // 校验是否是管理员
+        if (user != null && user.getRole().intValue() == Const.Role.ROLE_ADMIN) {
+            return ServerResponse.createBySuccess();
+        }
+
+        return ServerResponse.createByError();
+    }
 }
