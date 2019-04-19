@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-@Service()
+@Service(value = "iCategoryServiceImpl")
 public class CategoryServiceImpl implements ICategoryService {
 
     @Autowired
