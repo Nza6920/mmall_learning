@@ -1,5 +1,8 @@
 package com.mmall.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
@@ -10,11 +13,15 @@ import com.mmall.service.IProductService;
 import com.mmall.util.DateTimeUtil;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.ProductDetailVo;
+import com.mmall.vo.ProductListVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service(value = "iProductServiceImpl")
 public class ProductServiceImpl implements IProductService {
@@ -92,6 +99,45 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(productDetailVo);
     }
 
+    @Override
+    public ServerResponse getProductList(int pageNum, int pageSize) {
+        // startPage--start
+        // 填充自己的sql
+        // pageHelper--收尾
+
+        // 1. startPage
+        PageHelper.startPage(pageNum, pageSize);
+
+        // 2. 填充自己的sql
+        List<Product> productList = productMapper.selectList();
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for (Product product : productList) {
+            productListVoList.add(assembleProductListVo(product));
+        }
+
+        // 3. 收尾
+        PageInfo pageResult = new PageInfo(productList);
+        pageResult.setList(productListVoList);
+
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+    // product -> productListVo
+    private ProductListVo assembleProductListVo(Product product)
+    {
+        ProductListVo productListVo = new ProductListVo();
+        productListVo.setId(product.getId());
+        productListVo.setName(product.getName());
+        productListVo.setCategoryId(product.getCategoryId());
+        productListVo.setPrice(product.getPrice());
+        productListVo.setStatus(product.getStatus());
+        productListVo.setSubtitle(product.getSubtitle());
+        productListVo.setMainImage(product.getMainImage());
+        productListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "http://img.niu.test/"));
+
+        return productListVo;
+    }
+
     // product -> productVo
     private ProductDetailVo assembleProductDetailVo(Product product)
     {
@@ -120,4 +166,6 @@ public class ProductServiceImpl implements IProductService {
 
         return productDetailVo;
     }
+
+
 }
