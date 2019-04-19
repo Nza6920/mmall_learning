@@ -51,6 +51,13 @@ public class ProductManageController {
         }
     }
 
+    /**
+     * 设置产品状态
+     * @param session 会话
+     * @param productId 产品id
+     * @param status 状态
+     * @return ServerResponse
+     */
     @RequestMapping(value = "set_sale_status.do")
     @ResponseBody
     public ServerResponse setSaleStatus(HttpSession session, Integer productId, Integer status)
@@ -70,6 +77,12 @@ public class ProductManageController {
         }
     }
 
+    /**
+     * 获取产品详细信息
+     * @param session 会话
+     * @param productId 产品 id
+     * @return ServerResponse
+     */
     @RequestMapping(value = "detail.do")
     @ResponseBody
     public ServerResponse getDetail(HttpSession session, Integer productId)
@@ -89,6 +102,13 @@ public class ProductManageController {
         }
     }
 
+    /**
+     * 获取产品列表
+     * @param session   会话
+     * @param pageNum   页数
+     * @param pageSize  每一页的数据量
+     * @return ServerResponse
+     */
     @RequestMapping(value = "list.do")
     @ResponseBody
     public ServerResponse getList(HttpSession session,
@@ -106,6 +126,29 @@ public class ProductManageController {
             // 业务逻辑
 
             return iProductService.getProductList(pageNum, pageSize);
+        } else {
+            return ServerResponse.createByErrorMessage("无权限操作");
+        }
+    }
+
+    @RequestMapping(value = "search.do")
+    @ResponseBody
+    public ServerResponse productSearch(HttpSession session,
+                                        String productName,
+                                        Integer productId,
+                                        @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize)
+    {
+        // 判断用户是否登陆
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录请登录管理员");
+        }
+
+        // 判断用户是否为管理员
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            // 业务逻辑
+            return iProductService.searchProduct(productName, productId, pageNum, pageSize);
         } else {
             return ServerResponse.createByErrorMessage("无权限操作");
         }

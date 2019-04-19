@@ -100,7 +100,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ServerResponse getProductList(int pageNum, int pageSize) {
+    public ServerResponse<PageInfo> getProductList(int pageNum, int pageSize) {
         // startPage--start
         // 填充自己的sql
         // pageHelper--收尾
@@ -110,6 +110,28 @@ public class ProductServiceImpl implements IProductService {
 
         // 2. 填充自己的sql
         List<Product> productList = productMapper.selectList();
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for (Product product : productList) {
+            productListVoList.add(assembleProductListVo(product));
+        }
+
+        // 3. 收尾
+        PageInfo pageResult = new PageInfo(productList);
+        pageResult.setList(productListVoList);
+
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> searchProduct(String productName, Integer productId, int pageNum, int pageSize) {
+        // 1. startPage
+        PageHelper.startPage(pageNum, pageSize);
+
+        if (StringUtils.isNotBlank(productName)) {
+            productName = new StringBuilder().append("%").append(productName.trim()).append("%").toString();
+        }
+        // 2. 填充自己的sql
+        List<Product> productList = productMapper.selectByNameAndProductId(productName, productId);
         List<ProductListVo> productListVoList = Lists.newArrayList();
         for (Product product : productList) {
             productListVoList.add(assembleProductListVo(product));
