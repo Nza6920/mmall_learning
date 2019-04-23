@@ -183,8 +183,8 @@
     order by id asc
   </select>
   <select id="selectByNameAndProductId" resultMap="BaseResultMap" parameterType="map">
-    select
-      <include refid="Base_Column_List"/>
+    SELECT
+    <include refid="Base_Column_List"/>
     from mmall_product
     <where>
       <if test="productName != null">
@@ -194,5 +194,20 @@
         and id = #{productId}
       </if>
     </where>
+  </select>
+  <select id="selectByNameAndCategoryIds" resultMap="BaseResultMap" parameterType="map">
+    select
+      <include refid="Base_Column_List"/>
+    from mmall_product
+    where status = 1
+    <if test="productName != null">
+      and name like #{productName}
+    </if>
+    <if test="categoryIdList != null">
+      and category_id in
+      <foreach collection="categoryIdList" item="item" index="index" open="(" separator="," close=")" >
+        #{item}
+      </foreach>
+    </if>
   </select>
 </mapper>

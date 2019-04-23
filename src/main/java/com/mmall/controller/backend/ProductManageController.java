@@ -116,7 +116,7 @@ public class ProductManageController {
     }
 
     /**
-     * 获取产品列表
+     * 后台产品列表
      * @param session   会话
      * @param pageNum   当前页数
      * @param pageSize  每一页的数据量
