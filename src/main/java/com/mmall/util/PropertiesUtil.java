@@ -34,7 +34,6 @@ public class PropertiesUtil {
         if (StringUtils.isBlank(value)) {
             return null;
         }
-
         return value.trim();
     }
 
