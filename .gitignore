@@ -33,5 +33,5 @@ target/
 .DS_Store
 Thumbs.db
 
-zfbinfo.properties
+/zfbinfo.properties
 
