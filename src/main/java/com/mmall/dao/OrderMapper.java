@@ -2,7 +2,10 @@ package com.mmall.dao;
 
 import com.mmall.pojo.Order;
 import org.apache.ibatis.annotations.Param;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface OrderMapper {
@@ -21,4 +24,8 @@ public interface OrderMapper {
     Order selectByUserIdAndOrderNo(@Param("userId")Integer userId, @Param("orderNo")Long orderNo);
 
     Order selectByOrderNo(Long orderNo);
+
+    List<Order> selectByUserId(Integer userId);
+
+    List<Order> selectAllOrder();
 }
