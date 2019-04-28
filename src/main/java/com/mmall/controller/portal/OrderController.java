@@ -50,6 +50,44 @@ public class OrderController {
         return iOrderService.createOrder(user.getId(), shippingId);
     }
 
+
+    /**
+     * 取消订单
+     * @param session  会话
+     * @param orderNo  订单号
+     * @return ServerResponse
+     */
+    @RequestMapping(value = "cancel.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse cancel(HttpSession session, Long orderNo)
+    {
+        // 判断用户是否登陆
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+
+        return iOrderService.cancel(user.getId(), orderNo);
+    }
+
+    /**
+     * 获取购物车中已选中的产品明细
+     * @param session 会话
+     * @return ServerResponse
+     */
+    @RequestMapping(value = "get_order_cart_product.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse getOrderCartProduct(HttpSession session)
+    {
+        // 判断用户是否登陆
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+
+        return iOrderService.getOrderCartProduct(user.getId());
+    }
+
     /**
      * 发起支付
      * @param session 会话

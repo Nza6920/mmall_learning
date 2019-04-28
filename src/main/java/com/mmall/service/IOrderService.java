@@ -2,6 +2,7 @@ package com.mmall.service;
 
 import com.google.common.collect.Maps;
 import com.mmall.common.ServerResponse;
+import com.mmall.vo.OrderProductVo;
 import com.mmall.vo.OrderVo;
 
 import java.util.Map;
@@ -16,4 +17,7 @@ public interface IOrderService {
 
     ServerResponse<OrderVo> createOrder(Integer userId, Integer shippingId);
 
+    ServerResponse<String> cancel(Integer userId, Long orderNo);
+
+    ServerResponse getOrderCartProduct(Integer userId);
 }
