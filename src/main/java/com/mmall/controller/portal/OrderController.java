@@ -30,6 +30,26 @@ public class OrderController {
     @Autowired
     IOrderService iOrderService = null;
 
+
+    /**
+     * 创建订单
+     * @param session     会话
+     * @param shippingId  收货地址
+     * @return ServerResponse
+     */
+    @RequestMapping(value = "create.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse create(HttpSession session, Integer shippingId)
+    {
+        // 判断用户是否登陆
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+
+        return iOrderService.createOrder(user.getId(), shippingId);
+    }
+
     /**
      * 发起支付
      * @param session 会话

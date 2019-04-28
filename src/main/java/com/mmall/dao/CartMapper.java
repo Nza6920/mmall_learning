@@ -3,6 +3,7 @@ package com.mmall.dao;
 import com.google.common.collect.Lists;
 import com.mmall.pojo.Cart;
 import org.apache.ibatis.annotations.Param;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,4 +37,6 @@ public interface CartMapper {
                                   @Param("checked") Integer checked);
 
     int selectCartProductCount(Integer userId);
+
+    List<Cart> selectCheckedCartByUserId(Integer userId);
 }
