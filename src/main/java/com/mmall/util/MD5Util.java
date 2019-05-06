@@ -1,7 +1,5 @@
 package com.mmall.util;
 
-import org.springframework.util.StringUtils;
-import sun.security.provider.MD5;
 
 import java.security.MessageDigest;
 
