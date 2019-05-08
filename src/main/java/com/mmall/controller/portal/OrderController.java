@@ -9,7 +9,11 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisPoolUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +38,23 @@ public class OrderController {
 
     /**
      * 创建订单
-     * @param session     会话
+     * @param request     HttpServletRequest
      * @param shippingId  收货地址
      * @return ServerResponse
      */
     @RequestMapping(value = "create.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse create(HttpSession session, Integer shippingId)
+    public ServerResponse create(HttpServletRequest request, Integer shippingId)
     {
         // 判断用户是否登陆
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByErrorMessage("用户未登录, 无法获取信息.");
+        }
+        // json -> user
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
+
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -54,16 +65,23 @@ public class OrderController {
 
     /**
      * 取消订单
-     * @param session  会话
+     * @param request  HttpServletRequest
      * @param orderNo  订单号
      * @return ServerResponse
      */
     @RequestMapping(value = "cancel.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse cancel(HttpSession session, Long orderNo)
+    public ServerResponse cancel(HttpServletRequest request, Long orderNo)
     {
         // 判断用户是否登陆
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByErrorMessage("用户未登录, 无法获取信息.");
+        }
+        // json -> user
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
+
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -73,15 +91,21 @@ public class OrderController {
 
     /**
      * 获取购物车中已选中的产品明细
-     * @param session 会话
+     * @param request HttpServletRequest
      * @return ServerResponse
      */
     @RequestMapping(value = "get_order_cart_product.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse getOrderCartProduct(HttpSession session)
+    public ServerResponse getOrderCartProduct(HttpServletRequest request)
     {
         // 判断用户是否登陆
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByErrorMessage("用户未登录, 无法获取信息.");
+        }
+        // json -> user
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -91,16 +115,22 @@ public class OrderController {
 
     /**
      * 订单详情
-     * @param session 会话
+     * @param request HttpServletRequest
      * @param orderNo 订单号
      * @return ServerResponse
      */
     @RequestMapping(value = "detail.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse detail(HttpSession session, Long orderNo)
+    public ServerResponse detail(HttpServletRequest request, Long orderNo)
     {
         // 判断用户是否登陆
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByErrorMessage("用户未登录, 无法获取信息.");
+        }
+        // json -> user
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -110,17 +140,24 @@ public class OrderController {
 
     /**
      * 查看我的订单
-     * @param session 会话
+     * @param request HttpServletRequest
      * @return ServerResponse
      */
     @RequestMapping(value = "list.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse list(HttpSession session,
+    public ServerResponse list(HttpServletRequest request,
                                @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize)
     {
         // 判断用户是否登陆
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByErrorMessage("用户未登录, 无法获取信息.");
+        }
+        // json -> user
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
+
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -130,17 +167,22 @@ public class OrderController {
 
     /**
      * 发起支付
-     * @param session 会话
+     * @param request HttpServletRequest
      * @param orderNo 订单号
-     * @param request 请求
      * @return ServerResponse
      */
     @RequestMapping(value = "pay.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse pay(HttpSession session, Long orderNo, HttpServletRequest request)
+    public ServerResponse pay(Long orderNo, HttpServletRequest request)
     {
         // 判断用户是否登陆
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByErrorMessage("用户未登录, 无法获取信息.");
+        }
+        // json -> user
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -203,16 +245,22 @@ public class OrderController {
 
     /**
      * 查询订单状态
-     * @param session 会话
+     * @param request HttpServletRequest
      * @param orderNo 订单号
      * @return ServerResponse<Boolean>
      */
     @RequestMapping(value = "query_order_pay_status.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<Boolean> queryOrderPayStatus(HttpSession session, Long orderNo)
+    public ServerResponse<Boolean> queryOrderPayStatus(HttpServletRequest request, Long orderNo)
     {
         // 判断用户是否登陆
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(loginToken)) {
+            return ServerResponse.createByErrorMessage("用户未登录, 无法获取信息.");
+        }
+        // json -> user
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }

@@ -9,9 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class TokenCache {
-
-    public static final String TOKEN_PREFIX = "token_";
-
     private static LoadingCache<String, String> localCache = CacheBuilder
             .newBuilder()
             .initialCapacity(1000)
