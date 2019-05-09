@@ -3,6 +3,6 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <h2>Tomcat 2</h2>
+    <h2>Tomcat 1</h2>
 </body>
 </html>
