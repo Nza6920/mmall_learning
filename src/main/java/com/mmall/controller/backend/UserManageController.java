@@ -46,12 +46,9 @@ public class UserManageController {
 
                 return response;
             } else {
-
                 return ServerResponse.createByErrorMessage("不是管理员, 无法登陆!");
             }
         }
-
-
         return response;
     }
 }
