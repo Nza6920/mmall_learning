@@ -55,6 +55,29 @@ public class RedisShardedPoolUtil {
     }
 
     /**
+     * 获取旧值并设置新的值
+     * @param key     键
+     * @param value   值
+     * @return String
+     */
+    public static String getSet(String key, String value) {
+        ShardedJedis jedis = null;
+        String result = null;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.getSet(key, value);
+        } catch (Exception e) {
+            log.error("getSet key:{} value:{} error", key, value, e);
+            RedisShardedPool.returnBrokenResource(jedis);
+            return result;
+        }
+
+        RedisShardedPool.returnResource(jedis);
+        return result;
+    }
+
+    /**
      * 设置有时间限制的键值
      * @param key     键
      * @param value   值
@@ -70,6 +93,30 @@ public class RedisShardedPoolUtil {
             result = jedis.setex(key, exTime, value);
         } catch (Exception e) {
             log.error("setEx key:{} exTime:{} value:{} error", key, exTime, value, e);
+            RedisShardedPool.returnBrokenResource(jedis);
+            return result;
+        }
+
+        RedisShardedPool.returnResource(jedis);
+        return result;
+    }
+
+
+    /**
+     * 存储 redis 键值, 不存在设置, 存在不设置
+     * @param key     键
+     * @param value   值
+     * @return String
+     */
+    public static Long setnx(String key, String value) {
+        ShardedJedis jedis = null;
+        Long result = null;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.setnx(key, value);
+        } catch (Exception e) {
+            log.error("setnx key:{} value:{} error", key, value, e);
             RedisShardedPool.returnBrokenResource(jedis);
             return result;
         }

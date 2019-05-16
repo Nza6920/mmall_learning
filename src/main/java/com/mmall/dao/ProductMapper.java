@@ -1,10 +1,8 @@
 package com.mmall.dao;
 
-import com.google.common.collect.Lists;
 import com.mmall.pojo.Product;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -26,4 +24,7 @@ public interface ProductMapper {
     List<Product> selectByNameAndProductId(@Param("productName") String productName, @Param("productId") Integer productId);
 
     List<Product> selectByNameAndCategoryIds(@Param("productName") String productName, @Param("categoryIdList") List<Integer> categoryIdList);
+
+    // 用Integer作为返回值防止查不到的情况
+    Integer selectStockByProductId(Integer id);
 }

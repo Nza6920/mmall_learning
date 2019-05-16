@@ -149,4 +149,8 @@ public class Const {
             throw new RuntimeException("没有找到对应的枚举类型!");
         }
     }
+
+    public interface REDIS_LOCK {
+        String CLOSE_ORDER_TASK_LOCK = "CLOSE_ORDER_TASK_LOCK";
+    }
 }
