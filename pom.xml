@@ -55,7 +55,6 @@
             <version>${org.springframework.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -78,8 +77,6 @@
             <artifactId>aspectjrt</artifactId>
             <version>1.6.11</version>
         </dependency>
-
-
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -154,7 +151,6 @@
             <version>3.2.1</version>
         </dependency>
 
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -168,14 +164,12 @@
             <version>2.3</version>
         </dependency>
 
-
         <!-- id加密解密 -->
         <dependency>
             <groupId>org.hashids</groupId>
             <artifactId>hashids</artifactId>
             <version>1.0.1</version>
         </dependency>
-
 
         <!-- ftpclient -->
         <dependency>
@@ -198,7 +192,6 @@
             <version>2.0.1</version>
         </dependency>
 
-
         <!-- mybatis pager -->
 
         <dependency>
@@ -218,7 +211,6 @@
             <artifactId>jsqlparser</artifactId>
             <version>0.9.4</version>
         </dependency>
-
 
         <!-- alipay 对接依赖的jar包 -->
         <dependency>
@@ -274,6 +266,18 @@
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
             <version>1.2.0.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-avro</artifactId>
+            <version>2.9.0</version>
         </dependency>
     </dependencies>
 
